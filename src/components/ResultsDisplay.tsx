@@ -1,27 +1,7 @@
 
 import React from 'react';
 import { InvestmentResult, formatCurrency } from '../utils/calculateInvestment';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Line } from 'recharts';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface ResultsDisplayProps {
   result: InvestmentResult;
@@ -50,15 +30,23 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onReset }) => {
         </div>
         
         <div className="chart-container h-64 mb-8">
-          <Line
-            data={chartData}
-            width={600}
-            height={200}
-            dataKey="amount"
-            xDataKey="year"
-            stroke="#C7452D"
-            strokeWidth={2}
-          />
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip 
+                formatter={(value) => formatCurrency(Number(value))}
+                labelFormatter={(label) => `Ano ${label}`}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="amount" 
+                stroke="#C7452D" 
+                strokeWidth={2}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
         
         <div className="grid md:grid-cols-2 gap-6">

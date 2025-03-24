@@ -5,6 +5,12 @@ import InvestmentFormStep from './InvestmentFormStep';
 import ResultsDisplay from './ResultsDisplay';
 import { calculateInvestment, parseCurrencyInput, InvestmentResult } from '../utils/calculateInvestment';
 
+interface ContactInfo {
+  name: string;
+  email: string;
+  phone: string;
+}
+
 interface FormData {
   objective: string;
   initialInvestment: string;
@@ -12,11 +18,7 @@ interface FormData {
   monthlyContribution: string;
   investorProfile: string;
   marketReaction: string;
-  contact: {
-    name: string;
-    email: string;
-    phone: string;
-  };
+  contact: ContactInfo;
 }
 
 const initialFormData: FormData = {
@@ -77,7 +79,7 @@ const Calculator: React.FC = () => {
     setCurrentStep(0);
   };
   
-  const updateFormData = (field: keyof FormData, value: any) => {
+  const updateFormData = (field: keyof FormData, value: string | number | ContactInfo) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,

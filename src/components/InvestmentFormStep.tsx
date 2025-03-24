@@ -8,12 +8,18 @@ interface FormOption {
   value: string;
 }
 
+interface ContactInfo {
+  name: string;
+  email: string;
+  phone: string;
+}
+
 interface InvestmentFormStepProps {
   title: string;
   type: 'options' | 'currency' | 'number' | 'text' | 'contact';
   options?: FormOption[];
-  value?: string | number;
-  onChange: (value: string | number) => void;
+  value?: string | number | ContactInfo;
+  onChange: (value: string | number | ContactInfo) => void;
   onNext: () => void;
   onBack?: () => void;
   placeholder?: string;
@@ -56,6 +62,25 @@ const InvestmentFormStep: React.FC<InvestmentFormStepProps> = ({
     onChange(newValue);
   };
 
+  const handleContactChange = (field: keyof ContactInfo, fieldValue: string) => {
+    const contactInfo = value as ContactInfo || { name: '', email: '', phone: '' };
+    onChange({
+      ...contactInfo,
+      [field]: fieldValue
+    });
+  };
+
+  const isFormValid = () => {
+    if (value === undefined || value === '') return false;
+    
+    if (type === 'contact') {
+      const contactInfo = value as ContactInfo;
+      return !!(contactInfo?.name && contactInfo?.email && contactInfo?.phone);
+    }
+    
+    return true;
+  };
+
   return (
     <div className="form-step">
       <h2 className="form-heading">{title}</h2>
@@ -79,7 +104,7 @@ const InvestmentFormStep: React.FC<InvestmentFormStepProps> = ({
           <input
             type="text"
             className="currency-input"
-            value={value}
+            value={value as string}
             onChange={handleInputChange}
             placeholder={placeholder || 'R$ 0,00'}
           />
@@ -91,7 +116,7 @@ const InvestmentFormStep: React.FC<InvestmentFormStepProps> = ({
           <input
             type="number"
             className="currency-input"
-            value={value}
+            value={value as string}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder || '0'}
           />
@@ -105,7 +130,8 @@ const InvestmentFormStep: React.FC<InvestmentFormStepProps> = ({
               type="text"
               className="currency-input"
               placeholder="Nome"
-              onChange={(e) => onChange({...value as object, name: e.target.value})}
+              value={(value as ContactInfo)?.name || ''}
+              onChange={(e) => handleContactChange('name', e.target.value)}
             />
           </div>
           <div className="input-container">
@@ -113,7 +139,8 @@ const InvestmentFormStep: React.FC<InvestmentFormStepProps> = ({
               type="email"
               className="currency-input"
               placeholder="Email"
-              onChange={(e) => onChange({...value as object, email: e.target.value})}
+              value={(value as ContactInfo)?.email || ''}
+              onChange={(e) => handleContactChange('email', e.target.value)}
             />
           </div>
           <div className="input-container">
@@ -121,7 +148,8 @@ const InvestmentFormStep: React.FC<InvestmentFormStepProps> = ({
               type="tel"
               className="currency-input"
               placeholder="Telefone"
-              onChange={(e) => onChange({...value as object, phone: e.target.value})}
+              value={(value as ContactInfo)?.phone || ''}
+              onChange={(e) => handleContactChange('phone', e.target.value)}
             />
           </div>
         </div>
@@ -136,7 +164,7 @@ const InvestmentFormStep: React.FC<InvestmentFormStepProps> = ({
         <button 
           onClick={onNext} 
           className="btn-navigation ml-auto"
-          disabled={value === undefined || value === ''}
+          disabled={!isFormValid()}
         >
           {isLastStep ? 'Calcular' : 'Avançar'} 
           <ArrowRight className="ml-2 h-5 w-5" />
