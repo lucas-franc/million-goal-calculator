@@ -80,7 +80,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onReset, reques
             <div className="bg-primary p-6 rounded-lg">
               <h3 className="text-h5 mb-3">Para atingir mais rápido</h3>
               <p className="text-p3">
-                Aumentando seu aporte mensal para{' '}
+                Seu aporte atual é de <span className="result-highlight">{formatCurrency(monthlyContributionForTarget - suggestedMonthlyIncrease)}</span>.
+                <br />
+                Aumentando para{' '}
                 <span className="result-highlight">
                   {formatCurrency(monthlyContributionForTarget)}
                 </span>
