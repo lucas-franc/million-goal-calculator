@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
 
 interface FormOption {
   id: string;
@@ -86,14 +86,21 @@ const InvestmentFormStep: React.FC<InvestmentFormStepProps> = ({
       <h2 className="form-heading">{title}</h2>
       
       {type === 'options' && (
-        <div className="options-container animate-slideUp">
+        <div className="options-container animate-slideUp space-y-4">
           {options.map((option) => (
             <div
               key={option.id}
               className={`form-option ${value === option.value ? 'selected' : ''}`}
               onClick={() => handleOptionClick(option.value)}
             >
-              {option.label}
+              <div className="flex items-center w-full">
+                <div className="flex-grow">{option.label}</div>
+                {value === option.value && (
+                  <div className="w-6 h-6 bg-brand rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -124,7 +131,7 @@ const InvestmentFormStep: React.FC<InvestmentFormStepProps> = ({
       )}
       
       {type === 'contact' && (
-        <div className="contact-fields animate-slideUp">
+        <div className="contact-fields animate-slideUp space-y-4">
           <div className="input-container">
             <input
               type="text"
@@ -157,17 +164,18 @@ const InvestmentFormStep: React.FC<InvestmentFormStepProps> = ({
       
       <div className="flex justify-between mt-8">
         {onBack && (
-          <button onClick={onBack} className="btn-navigation back">
+          <button onClick={onBack} className="btn-navigation back group">
+            <ArrowLeft className="mr-2 h-5 w-5 group-hover:animate-pulse" />
             Voltar
           </button>
         )}
         <button 
           onClick={onNext} 
-          className="btn-navigation ml-auto"
+          className={`btn-navigation ml-auto ${isFormValid() ? 'pulse-border' : ''}`}
           disabled={!isFormValid()}
         >
           {isLastStep ? 'Calcular' : 'Avançar'} 
-          <ArrowRight className="ml-2 h-5 w-5" />
+          <ArrowRight className="ml-2 h-5 w-5 group-hover:animate-pulse" />
         </button>
       </div>
     </div>
