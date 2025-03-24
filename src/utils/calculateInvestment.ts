@@ -12,6 +12,7 @@ export interface InvestmentResult {
   monthlyContributionForTarget: number;
   suggestedMonthlyIncrease: number;
   chartData: { year: number; amount: number }[];
+  yearsWithSuggestedContribution?: number; // Add this field
 }
 
 export const formatCurrency = (value: number): string => {
@@ -96,11 +97,39 @@ export const calculateInvestment = (data: InvestmentData): InvestmentResult => {
     targetMonthly = high;
   }
   
+  const suggestedMonthlyIncrease = targetMonthly - monthlyContribution;
+  
+  // Calculate how long it would take with the suggested contribution
+  let yearsWithSuggestedContribution = 0;
+  
+  if (suggestedMonthlyIncrease > 0) {
+    let amountWithSuggestedContribution = initialAmount;
+    
+    for (let year = 1; year <= 100; year++) {
+      for (let month = 1; month <= 12; month++) {
+        amountWithSuggestedContribution += targetMonthly;
+        amountWithSuggestedContribution *= (1 + monthlyReturn);
+      }
+      
+      if (amountWithSuggestedContribution >= 1000000 && yearsWithSuggestedContribution === 0) {
+        yearsWithSuggestedContribution = year;
+        break;
+      }
+      
+      // Safety break
+      if (year >= 100) {
+        yearsWithSuggestedContribution = 100;
+        break;
+      }
+    }
+  }
+  
   return {
     yearsToMillion,
     finalAmount: currentAmount,
     monthlyContributionForTarget: targetMonthly,
-    suggestedMonthlyIncrease: targetMonthly - monthlyContribution,
-    chartData
+    suggestedMonthlyIncrease,
+    chartData,
+    yearsWithSuggestedContribution
   };
 };

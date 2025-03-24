@@ -16,6 +16,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onReset, reques
     monthlyContributionForTarget,
     suggestedMonthlyIncrease,
     chartData,
+    yearsWithSuggestedContribution,
   } = result;
 
   // Calculate the difference between requested and actual years
@@ -31,6 +32,20 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onReset, reques
       return `Você atingirá seu objetivo exatamente no período solicitado de ${requestedYears} anos.`;
     }
   };
+
+  // Calculate time saved with increased contribution
+  const calculateTimeSaved = () => {
+    if (!yearsWithSuggestedContribution || suggestedMonthlyIncrease <= 0) {
+      return null;
+    }
+    
+    const timeSaved = yearsToMillion - yearsWithSuggestedContribution;
+    if (timeSaved <= 0) return null;
+    
+    return `Com este aumento, você economizaria ${timeSaved} ${timeSaved === 1 ? 'ano' : 'anos'} (${yearsWithSuggestedContribution} anos em vez de ${yearsToMillion}).`;
+  };
+
+  const timeSavedMessage = calculateTimeSaved();
 
   return (
     <div className="results-container animate-fadeIn">
@@ -87,6 +102,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onReset, reques
                   {formatCurrency(monthlyContributionForTarget)}
                 </span>
                 {' '}você atingirá seu objetivo mais rapidamente.
+                
+                {timeSavedMessage && (
+                  <div className="mt-2 p-2 bg-[#F8F2E9] rounded">
+                    <span className="font-medium">{timeSavedMessage}</span>
+                  </div>
+                )}
               </p>
             </div>
           )}
