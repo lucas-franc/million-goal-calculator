@@ -6,9 +6,10 @@ import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 interface ResultsDisplayProps {
   result: InvestmentResult;
   onReset: () => void;
+  requestedYears: number; // Add requestedYears prop
 }
 
-const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onReset }) => {
+const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onReset, requestedYears }) => {
   const {
     yearsToMillion,
     finalAmount,
@@ -16,6 +17,20 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onReset }) => {
     suggestedMonthlyIncrease,
     chartData,
   } = result;
+
+  // Calculate the difference between requested and actual years
+  const yearDifference = yearsToMillion - requestedYears;
+  
+  // Determine comparison message
+  const getComparisonMessage = () => {
+    if (yearDifference > 0) {
+      return `Você solicitou ${requestedYears} anos, mas levará ${yearDifference} anos a mais do que planejou.`;
+    } else if (yearDifference < 0) {
+      return `Você solicitou ${requestedYears} anos, mas atingirá seu objetivo ${Math.abs(yearDifference)} anos antes do esperado!`;
+    } else {
+      return `Você atingirá seu objetivo exatamente no período solicitado de ${requestedYears} anos.`;
+    }
+  };
 
   return (
     <div className="results-container animate-fadeIn">
@@ -27,6 +42,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onReset }) => {
           <div className="text-d3 md:text-d2 text-brand font-light">
             {yearsToMillion} anos
           </div>
+        </div>
+        
+        {/* Add comparison section */}
+        <div className="mb-8 p-4 bg-[#EBE7E6] rounded-lg border-l-4 border-[#C7935A]">
+          <h3 className="text-h5 mb-2 text-[#333131]">Comparação com seu planejamento</h3>
+          <p className="text-p4 text-[#333131]">{getComparisonMessage()}</p>
         </div>
         
         <div className="chart-container h-64 mb-8">

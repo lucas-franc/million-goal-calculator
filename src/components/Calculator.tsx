@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import ProgressIndicator from './ProgressIndicator';
 import InvestmentFormStep from './InvestmentFormStep';
@@ -46,7 +45,6 @@ const Calculator: React.FC = () => {
     if (currentStep < totalSteps - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
-      // Submit form and calculate
       calculateResults();
     }
   };
@@ -86,7 +84,6 @@ const Calculator: React.FC = () => {
     }));
   };
   
-  // Form step definitions
   const steps = [
     {
       title: "Qual é seu principal objetivo com este investimento?",
@@ -149,7 +146,13 @@ const Calculator: React.FC = () => {
   const currentStepConfig = steps[currentStep];
   
   if (calculationResult) {
-    return <ResultsDisplay result={calculationResult} onReset={handleReset} />;
+    return (
+      <ResultsDisplay 
+        result={calculationResult} 
+        onReset={handleReset} 
+        requestedYears={parseInt(formData.years, 10)}
+      />
+    );
   }
   
   return (
