@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -24,10 +25,11 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
-				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
-				},
+                // Add Warren color palette
+                brand: '#C7452D',
+                text: '#333131',
+                contrast: '#C7935A',
+                primary: '#EBE7E6',
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
@@ -63,34 +65,82 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			fontFamily: {
+				'warren-text': ['Warren Text', 'sans-serif'],
+				'warren-display': ['Warren Display', 'sans-serif'],
+			},
+			fontSize: {
+				d1: ['160px', '160px'],
+				d2: ['104px', '104px'],
+				d3: ['64px', '72px'],
+				h1: ['48px', '56px'],
+				h2: ['40px', '48px'],
+				h3: ['26px', '32px'],
+				h4: ['24px', '32px'],
+				h5: ['20px', '28px'],
+				h6: ['19px', '26px'],
+				p1: ['31px', '40px'],
+				p2: ['23px', '32px'],
+				p3: ['19px', '28px'],
+				p4: ['17px', '26px'],
+				p5: ['15px', '24px'],
+				p6: ['14px', '18px'],
+				'small-d1': ['68px', '72px'],
+				'small-d2': ['48px', '56px'],
+				'small-d3': ['40px', '56px'],
+			},
+			spacing: {
+				64: '64px',
+				75: '75px',
+				1440: '1440px',
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				btn: '8px',
+			},
+			maxWidth: {
+				section: '1440px',
+			},
+			gridTemplateColumns: {
+				12: 'repeat(12, 72px)',
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' },
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
-				}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' },
+				},
+				fadeIn: {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' },
+				},
+				slideUp: {
+					'0%': { transform: 'translateY(10px)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' },
+				},
+				slideIn: {
+					'0%': { transform: 'translateX(20px)', opacity: '0' },
+					'100%': { transform: 'translateX(0)', opacity: '1' },
+				},
+				pulse: {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
-		}
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				fadeIn: 'fadeIn 0.6s ease-in-out',
+				slideUp: 'slideUp 0.6s ease-out',
+				slideIn: 'slideIn 0.6s ease-out',
+				pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+			},
+		},
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
